@@ -4,11 +4,13 @@
                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                      xmlns:local="clr-namespace:Babilon"
                      xmlns:mahapps="http://metro.mahapps.com/winfx/xaml/controls"
+                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                      Title="Саҳифаи асоси"
                      Width="525"
                      Height="350"
                      Background="{DynamicResource MaterialDesignPaper}"
+                     Loaded="MetroWindow_Loaded"
                      TextElement.FontWeight="Medium"
                      TextElement.Foreground="{DynamicResource MaterialDesignBody}"
                      TextOptions.TextFormattingMode="Ideal"
@@ -16,5 +18,16 @@
                      WindowStartupLocation="CenterScreen"
                      WindowState="Maximized"
                      mc:Ignorable="d">
-    <Grid />
+    <mahapps:MetroWindow.RightWindowCommands>
+        <mahapps:WindowCommands>
+            <materialDesign:PackIcon Name="uiLock"
+                                     Width="30"
+                                     Height="30"
+                                     Kind="Lock"
+                                     MouseDoubleClick="uiLock_MouseDoubleClick" />
+
+
+        </mahapps:WindowCommands>
+    </mahapps:MetroWindow.RightWindowCommands>
+    <ContentControl Content="{Binding CurrentContent}" />
 </mahapps:MetroWindow>

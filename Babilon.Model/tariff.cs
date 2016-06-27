@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Babilon.Model
 {
@@ -15,6 +12,8 @@ namespace Babilon.Model
 
         [ForeignKey(nameof(CompanyId))]
         public virtual Company Company { get; set; }
+
+        public virtual ICollection<Simcard> Simcards { get; set; }
 
 
     }

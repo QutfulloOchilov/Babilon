@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Babilon", "Babilon\Babilon.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Babilon.Model", "Babilon.Model\Babilon.Model.csproj", "{D85701BD-C278-4B24-9B1C-93F88EE9D856}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Babilon.TestModel", "Babilon.TestModel\Babilon.TestModel.csproj", "{2A429CB5-BB53-48E2-9EB6-FA15387EB9E4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D85701BD-C278-4B24-9B1C-93F88EE9D856}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D85701BD-C278-4B24-9B1C-93F88EE9D856}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D85701BD-C278-4B24-9B1C-93F88EE9D856}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A429CB5-BB53-48E2-9EB6-FA15387EB9E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A429CB5-BB53-48E2-9EB6-FA15387EB9E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A429CB5-BB53-48E2-9EB6-FA15387EB9E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A429CB5-BB53-48E2-9EB6-FA15387EB9E4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

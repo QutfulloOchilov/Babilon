@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Babilon.Model
 {
     [Table(nameof(Company))]
-    public class Company: EntityBase
+    public class Company : EntityBase
     {
-        [Column]
+        #region Name
         public string Name { get; set; }
+        #endregion
 
+        #region Tariffs
         public virtual ICollection<Tariff> Tariffs { get; set; }
+        #endregion
     }
 }

@@ -1,41 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Babilon.Model
 {
     [Table(nameof(Client))]
-    public class Client : EntityBase
+    public class Client : Person
     {
 
-        private string firstName;
-        public string FirstName { get { return firstName; } set { firstName = value; NotifyPropertyChanged(); } }
-
-
-        private string lastName;
-        public string LastName { get { return lastName; } set { lastName = value; NotifyPropertyChanged(); } }
-
-
-        private string telephon;
-        public string Telephon { get { return telephon; } set { telephon = value; NotifyPropertyChanged(); } }
-
-
+        #region Dog
         private int dog;
         public int Dog { get { return dog; } set { dog = value; NotifyPropertyChanged(); } }
+        #endregion
 
-
+        #region Balance
         private double balance;
         public double Balance { get { return balance; } set { balance = value; NotifyPropertyChanged(); } }
+        #endregion
 
+        #region Docs
+        public virtual ICollection<Doc> Docs { get; set; }
+        #endregion
 
-        public Guid AddressId { get; set; }
+        #region Operations
+        public virtual ICollection<Operation> Operations { get; set; }
+        #endregion
 
-        [ForeignKey(nameof(AddressId))]
-        public virtual Address Address { get; set; }
-
+        #region Prices
+        public virtual ICollection<Price> Prices { get; set; }
+        #endregion
 
     }
 }

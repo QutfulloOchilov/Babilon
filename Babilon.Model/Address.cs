@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Babilon.Model
 {
@@ -12,7 +8,6 @@ namespace Babilon.Model
     {
         private string name;
         public string Name { get { return name; } set { name = value; NotifyPropertyChanged(); } }
-
 
         public virtual ICollection<Client> Clients { get; set; }
     }
