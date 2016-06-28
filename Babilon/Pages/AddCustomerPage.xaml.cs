@@ -16,14 +16,14 @@ using Babilon.Controls;
 namespace Babilon.Pages
 {
     /// <summary>
-    /// Interaction logic for ImportPage.xaml
+    /// Interaction logic for AddCustomerPage.xaml
     /// </summary>
-    public partial class ImportPage : CustomUserControl
+    public partial class AddCustomerPage : CustomUserControl
     {
-        public ImportPage()
+        public AddCustomerPage()
         {
             InitializeComponent();
-            this.SetTitle("Импорт кардани.");
+            this.SetTitle("Дохил кардани мизоҷи нав");
         }
     }
 }

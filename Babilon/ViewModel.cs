@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Babilon.Pages;
 using System.Windows.Controls;
+using MySql.Data.MySqlClient;
+using System.Data.Entity.Core;
+using Babilon.Message;
 
 namespace Babilon
 {
@@ -18,24 +21,39 @@ namespace Babilon
     {
         private User currentUser;
         private ObservableCollection<Menu> menus;
+        private Menu selectedMenu;
 
         public ViewModel()
         {
-            CreateDefaultUser();
-            menus = new ObservableCollection<Menu>();
-            CreateDefaultMenu();
-            currentContent = new ContentControl();
-            SampleSelectedQuery();
+            try
+            {
+                CreateDefaultUser();
+                menus = new ObservableCollection<Menu>();
+                CreateDefaultMenu();
+                currentContent = new ContentControl();
+            }
+            catch (ProviderIncompatibleException e)
+            {
+                CreateExcaption(e);
+            }
         }
 
-        private void SampleSelectedQuery()
+        private void CreateExcaption(Exception e)
         {
-            List<User> users;
-            using (var context = new EntityContext())
+            var innerException = e.InnerException;
+            if (innerException.InnerException != null && innerException.InnerException is MySqlException && (innerException.InnerException as MySqlException).Number == 1042)
             {
-                users = context.Users.Where(u => u.FirstName == "Qutfullo").ToList();
+                var connectionException = innerException?.InnerException;
+                var connectionMessage = new Message.Message
+                {
+                    Title = "Базаи маълумот дастнорас аст!",
+                    Detail = "Барнома ба базаи маълумот пайваст шуда натавониста истодааст.",
+                    Solution = "Шумо бояд ба базаи маълумот дастраси дошта бошед!"
+                };
+                connectionMessage.Choices.Add(new MessageChoice("OK") { Message = connectionMessage });
+                MessageManager.OnMessageManagerEvent(connectionMessage);
             }
-            var uuuu = users;
+
         }
 
         #region CurrentUser
@@ -46,39 +64,39 @@ namespace Babilon
         {
             using (var context = new EntityContext())
             {
-                User newUser = context.Users.FirstOrDefault(u => u.Login == "qutfullo");
-                if (newUser == null)
+                try
                 {
-                    newUser = new User()
+                    User newUser = context.Users.FirstOrDefault(u => u.Login == "qutfullo");
+                    if (newUser == null)
                     {
-                        FirstName = "Qutfullo",
-                        LastName = "OChilov",
-                        Email = "kutfullo@mail.ru",
-                        Login = "qutfullo",
-                        Password = "123",
-                        Telephon = "+992987807042"
-                    };
-                    Client dilovarClient = new Client
-                    {
-                        FirstName = "Dilovar",
-                        LastName = "Otaev",
-                        Telephon = "+992987000874"
-                    };
-
-                    Address newAddress = context.Addresses.FirstOrDefault(a => a.Name == "m.Yasi");
-                    if (newAddress == null)
-                    {
-                        newAddress = new Address
+                        newUser = new User()
                         {
-                            Name = "m.Yasi"
+                            FirstName = "Qutfullo",
+                            LastName = "OChilov",
+                            Email = "kutfullo@mail.ru",
+                            Login = "qutfullo",
+                            Password = "123",
+                            Telephon = "+992987807042"
                         };
-                        context.Addresses.Add(newAddress);
+
+                        Address newAddress = context.Addresses.FirstOrDefault(a => a.Name == "m.Yasi");
+                        if (newAddress == null)
+                        {
+                            newAddress = new Address
+                            {
+                                Name = "m.Yasi"
+                            };
+                            context.Addresses.Add(newAddress);
+                        }
+                        newUser.Address = newAddress;
+                        context.Users.Add(newUser);
+                        await context.SaveChangesAsync();
                     }
-                    newUser.Address = newAddress;
-                    dilovarClient.Address = newAddress;
-                    context.Clients.Add(dilovarClient);
-                    context.Users.Add(newUser);
-                    await context.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    CreateExcaption(e);
+
                 }
             }
         }
@@ -89,11 +107,16 @@ namespace Babilon
               {
                   using (var context = new EntityContext())
                   {
+                      bool result = false;
                       var resultCheck = context.Users.FirstOrDefault(u => u.Login == login && u.Password == password);
-                      return resultCheck != null;
+                      if (resultCheck != null)
+                      {
+                          CurrentUser = resultCheck;
+                          result = true;
+                      }
+                      return result;
                   }
               });
-            taskCheck.Wait(100000);
             return taskCheck;
         }
 
@@ -107,7 +130,6 @@ namespace Babilon
             get { return menus; }
             set { menus = value; }
         }
-
 
         private void CreateDefaultMenu()
         {
@@ -131,22 +153,42 @@ namespace Babilon
             controlSimMenu.Childs.Add(exportSim);
             #endregion
 
-            #region Control
+            #region ControlCustomer
             Menu controlCustomerMenu = new Menu();
             controlCustomerMenu.Title = "Кор бо мизоҷ";
-            //< materialDesign:PackIcon Kind = "AccountMultiple" />
             controlCustomerMenu.Icon = "AccountMultiple";
 
             Menu clientMenu = new Menu();
             clientMenu.Title = "Мизоҷон";
             clientMenu.Icon = "FormatListBulleted";
+
+            Menu addNewClientMenu = new Menu();
+            addNewClientMenu.Title = "Дохил кардани мизоҷи нав";
+            addNewClientMenu.Icon = "AccountMultiplePlus";
+            addNewClientMenu.PageForSlectedMenu = new AddCustomerPage();
+
+            //Adding sub menu to controlCustomer
             controlCustomerMenu.Childs.Add(clientMenu);
-            //< materialDesign:PackIcon Kind = "FormatListBulleted" />
+            controlCustomerMenu.Childs.Add(addNewClientMenu);
+
             #endregion
 
             //Adding menu
             Menus.Add(controlSimMenu);
             Menus.Add(controlCustomerMenu);
+        }
+
+        public Menu SelectedMenu
+        {
+            get { return selectedMenu; }
+            set
+            {
+                if (selectedMenu != value)
+                {
+                    selectedMenu = value;
+                    CurrentContent.Content = selectedMenu.PageForSlectedMenu;
+                }
+            }
         }
 
         #endregion
@@ -164,24 +206,6 @@ namespace Babilon
                 }
             }
         }
-
-        private Menu selectedMenu;
-
-        public Menu SelectedMenu
-        {
-            get { return selectedMenu; }
-            set
-            {
-                if (selectedMenu != value)
-                {
-                    selectedMenu = value;
-                    CurrentContent.Content = selectedMenu.PageForSlectedMenu;
-                }
-            }
-        }
-
-
-
 
         #region Notify
 

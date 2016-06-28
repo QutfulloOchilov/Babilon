@@ -12,17 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Babilon.Controls;
 
 namespace Babilon.Pages
 {
     /// <summary>
     /// Interaction logic for MainPage.xaml
     /// </summary>
-    public partial class MainPage : UserControl
+    public partial class MainPage : CustomUserControl
     {
         public MainPage()
         {
             InitializeComponent();
+            this.SetTitle("Сахифаи асоси");
         }
     }
 }

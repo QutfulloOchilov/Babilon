@@ -32,6 +32,10 @@ namespace Babilon.Model
             }
         }
 
+
+        private string image;
+        public string Image { get { return image; } set { image = value; NotifyPropertyChanged(); } }
+
         private Address address;
         [ForeignKey(nameof(AddressId))]
         public virtual Address Address { get { return address; } set { address = value; NotifyPropertyChanged(); } }
