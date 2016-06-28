@@ -30,6 +30,7 @@ namespace Babilon
 
         private void SampleSelectedQuery()
         {
+            ///changed
             List<User> users;
             using (var context = new EntityContext())
             {
